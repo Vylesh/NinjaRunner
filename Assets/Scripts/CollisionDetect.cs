@@ -9,7 +9,7 @@ public class CollisionDetect : MonoBehaviour
     [SerializeField] AudioSource collisionFX;
     [SerializeField] GameObject mainCam;
     [SerializeField] GameObject fadeOut;
-    
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -18,14 +18,31 @@ public class CollisionDetect : MonoBehaviour
 
     IEnumerator CollisionEnd()
     {
-        collisionFX.Play();
-        thePlayer.GetComponent<PlayerMove>().enabled = false;
-        playerAnim.GetComponent<Animator>().Play("Stumble Backwards");
-        mainCam.GetComponent<Animator>().Play("CollisionCam");
+        // Ses kaynağını güvenli bir şekilde çal
+        if (collisionFX != null)
+        {
+            collisionFX.Play();
+        }
+        else
+        {
+            Debug.LogWarning("collisionFX atanmamış! Lütfen Inspector'dan AudioSource atayın.");
+        }
+        
+        if (thePlayer != null)
+            thePlayer.GetComponent<PlayerMove>().enabled = false;
+            
+        if (playerAnim != null)
+            playerAnim.GetComponent<Animator>().Play("Stumble Backwards");
+            
+        if (mainCam != null)
+            mainCam.GetComponent<Animator>().Play("CollisionCam");
+            
         yield return new WaitForSeconds(3);
-        fadeOut.SetActive(true);
+        
+        if (fadeOut != null)
+            fadeOut.SetActive(true);
+            
         yield return new WaitForSeconds(3);
         SceneManager.LoadScene(0);
     }
-    
 }
